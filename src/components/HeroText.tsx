@@ -1,7 +1,9 @@
+import { ReactNode } from "react";
+
 interface HeroTextProps {
   subtitle: string;
   titleLine1: string;
-  titleLine2: string;
+  titleLine2: string | ReactNode;
   paragraphLeft: string;
   paragraphRight: string;
   paragraphColumn?: "left" | "right";
