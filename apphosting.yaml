@@ -21,7 +21,7 @@ env:
       - RUNTIME
 
   - variable: CLERK_SECRET_KEY
-    secret: CLERK_SECRET_KEY
+    value: "sk_test_W9pd2kz4dphsFOCSWRxebGASt2FplFRpFiySdoxNTI"
     availability:
       - BUILD
       - RUNTIME
