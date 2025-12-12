@@ -10,7 +10,7 @@ interface TrendsSectionProps {
 
 export default function TrendsSection({ trendsRef, trendsTextRef }: TrendsSectionProps) {
   return (
-    <section ref={trendsRef} className="relative h-screen w-full px-4 md:px-6 lg:px-10 overflow-hidden z-20 mt-[100vh]">
+    <section ref={trendsRef} className="relative h-screen w-full px-0 md:px-6 lg:px-10 overflow-hidden z-20 mt-[100vh]">
       <div className="relative h-full w-full overflow-hidden rounded-b-4xl">
         {/* Grid Background */}
         <div

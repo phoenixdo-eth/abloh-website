@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="relative bg-black py-20 px-4 md:px-6 lg:px-16 z-20 rounded-t-4xl">
+    <footer className="relative bg-black py-20 px-0 md:px-6 lg:px-16 z-20 rounded-t-4xl">
       <div className="max-w-7xl mx-auto">
         {/* Logo and Tagline */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-8">

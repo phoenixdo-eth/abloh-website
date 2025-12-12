@@ -1,0 +1,143 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+
+const POSTBRIDGE_API_URL = 'https://api.post-bridge.com/v1';
+
+// Create upload URL
+export async function POST(request: NextRequest) {
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { fileName, mimeType } = body;
+
+    if (!fileName || !mimeType) {
+      return NextResponse.json({
+        error: 'File name and MIME type are required'
+      }, { status: 400 });
+    }
+
+    // Validate MIME type
+    const allowedMimeTypes = [
+      'image/png',
+      'image/jpeg',
+      'video/mp4',
+      'video/quicktime'
+    ];
+
+    if (!allowedMimeTypes.includes(mimeType)) {
+      return NextResponse.json({
+        error: `Invalid MIME type. Allowed types: ${allowedMimeTypes.join(', ')}`
+      }, { status: 400 });
+    }
+
+    const postbridgeToken = process.env.POSTBRIDGE_API_TOKEN;
+    if (!postbridgeToken || postbridgeToken === 'your_postbridge_token_here') {
+      return NextResponse.json({
+        error: 'PostBridge API token not configured. Please add your token to .env.local'
+      }, { status: 500 });
+    }
+
+    const response = await fetch(`${POSTBRIDGE_API_URL}/media/create-upload-url`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${postbridgeToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        file_name: fileName,
+        mime_type: mimeType,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json({
+        error: 'Failed to create upload URL',
+        details: data
+      }, { status: response.status });
+    }
+
+    return NextResponse.json({
+      success: true,
+      mediaId: data.media_id || data.data?.media_id,
+      uploadUrl: data.upload_url || data.data?.upload_url,
+      message: 'Upload URL created successfully. Use PUT request to upload file.',
+    });
+
+  } catch (error: unknown) {
+    console.error('Error creating upload URL:', error);
+
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+
+    return NextResponse.json(
+      { error: 'Failed to create upload URL', details: errorMessage },
+      { status: 500 }
+    );
+  }
+}
+
+// GET media list
+export async function GET(request: NextRequest) {
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const postbridgeToken = process.env.POSTBRIDGE_API_TOKEN;
+    if (!postbridgeToken || postbridgeToken === 'your_postbridge_token_here') {
+      return NextResponse.json({
+        error: 'PostBridge API token not configured'
+      }, { status: 500 });
+    }
+
+    // Get query parameters for filtering
+    const searchParams = request.nextUrl.searchParams;
+    const postId = searchParams.get('post_id');
+    const type = searchParams.get('type');
+
+    // Build URL with query parameters
+    const params = new URLSearchParams();
+    if (postId) params.append('post_id', postId);
+    if (type) params.append('type', type);
+
+    const url = `${POSTBRIDGE_API_URL}/media${params.toString() ? `?${params.toString()}` : ''}`;
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${postbridgeToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json({
+        error: 'Failed to fetch media',
+        details: data
+      }, { status: response.status });
+    }
+
+    return NextResponse.json({
+      success: true,
+      media: data.data || data,
+    });
+
+  } catch (error: unknown) {
+    console.error('Error fetching media:', error);
+
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+
+    return NextResponse.json(
+      { error: 'Failed to fetch media', details: errorMessage },
+      { status: 500 }
+    );
+  }
+}

@@ -15,7 +15,7 @@ export default function HeroSection({ heroRef, heroTextRef, heroBgRef }: HeroSec
   return (
     <section
       ref={heroRef}
-      className="relative h-screen w-full pb-4 md:pb-6 lg:pb-10 px-4 md:px-6 lg:px-10 overflow-hidden z-30"
+      className="relative h-screen w-full pb-4 md:pb-6 lg:pb-10 px-0 md:px-6 lg:px-10 overflow-hidden z-30"
     >
       {/* <CursorTrail /> */}
       <div className="relative h-full w-full overflow-hidden rounded-b-4xl">
@@ -37,7 +37,7 @@ export default function HeroSection({ heroRef, heroTextRef, heroBgRef }: HeroSec
             <HeroText
               subtitle="MORE THAN CONTENT"
               titleLine1="Welcome to"
-              titleLine2="Abloh Studio."
+              titleLine2="Studio Abloh."
               paragraphLeft="Our story began in a small apartment that thought it could be onto something bigger."
               paragraphRight="Seventy-five days into building on that legacy, we're aiming even higher."
             />

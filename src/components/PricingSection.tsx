@@ -54,7 +54,7 @@ export default function PricingSection({ pricingRef, pricingCardsRef }: PricingS
   ];
 
   return (
-    <section ref={pricingRef} className="relative min-h-screen w-full px-4 md:px-6 lg:px-10 overflow-hidden z-20">
+    <section ref={pricingRef} className="relative min-h-screen w-full px-0 md:px-6 lg:px-10 overflow-hidden z-20">
       <div className="relative w-full bg-white py-16 md:py-32">
         {/* Grid Background */}
         <div

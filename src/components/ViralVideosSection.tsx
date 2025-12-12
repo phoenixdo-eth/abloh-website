@@ -14,7 +14,7 @@ export default function ViralVideosSection({ viralVideosRef, viralVideosBgRef, v
   return (
     <section
       ref={viralVideosRef}
-      className="absolute top-0 left-0 right-0 h-screen w-full px-4 md:px-6 lg:px-10 overflow-hidden z-10"
+      className="absolute top-0 left-0 right-0 h-screen w-full px-0 md:px-6 lg:px-10 overflow-hidden z-10"
     >
       <div className="relative h-full w-full">
         <div
@@ -32,7 +32,7 @@ export default function ViralVideosSection({ viralVideosRef, viralVideosBgRef, v
         <div className="relative h-full flex items-center justify-center">
           <div ref={viralVideosTextRef}>
             <HeroText
-              subtitle="DISCOVER ABLOH STUDIO"
+              subtitle="DISCOVER STUDIO ABLOH"
               titleLine1="Viral Videos"
               titleLine2={
                 <>
