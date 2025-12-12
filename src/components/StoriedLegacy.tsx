@@ -49,8 +49,8 @@ export default function StoriedLegacy() {
               A storied
             </h2>
             <p className="text-lg md:text-xl text-gray-700 leading-relaxed max-w-md">
-              For more than 75 years, we've pointed our compass toward new
-              paths, people, and possibilities. And we're just getting started.
+              For more than 75 years, we&apos;ve pointed our compass toward new
+              paths, people, and possibilities. And we&apos;re just getting started.
             </p>
 
             {/* Bottom Left Images Grid */}

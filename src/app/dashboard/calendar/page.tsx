@@ -208,7 +208,7 @@ export default function CalendarPage() {
       });
   }, [posts]);
 
-  const handleSelectEvent = (event: any) => {
+  const handleSelectEvent = (event: { resource: Post }) => {
     const post = event.resource;
     if (post && post.scheduled_at) {
       const date = new Date(post.scheduled_at);
@@ -230,7 +230,7 @@ export default function CalendarPage() {
     setSelectedDate(slotInfo.start);
   };
 
-  const eventStyleGetter = (event: any) => {
+  const eventStyleGetter = (event: { resource: Post }) => {
     const post = event.resource;
     const backgroundColor = getStatusColor(post?.status || 'scheduled');
     return {
@@ -300,7 +300,7 @@ export default function CalendarPage() {
                       showMultiDayTimes
                       components={{
                         agenda: {
-                          event: ({ event }: any) => (
+                          event: ({ event }: { event: { title: string } }) => (
                             <div className="flex items-center gap-2">
                               <span className="font-medium">{event.title}</span>
                             </div>

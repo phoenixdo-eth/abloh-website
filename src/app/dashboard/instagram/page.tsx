@@ -200,7 +200,7 @@ export default function InstagramScraperPage() {
             <CardHeader>
               <CardTitle>Scraped Profiles</CardTitle>
               <CardDescription>
-                View all Instagram profiles you've scraped
+                View all Instagram profiles you&apos;ve scraped
               </CardDescription>
             </CardHeader>
             <CardContent>

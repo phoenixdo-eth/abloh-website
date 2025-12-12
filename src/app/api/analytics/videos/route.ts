@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
 
     // Calculate time range filter
     const now = new Date();
-    let startDate = new Date();
+    const startDate = new Date();
 
     switch (timeRange) {
       case '7d':
@@ -110,19 +110,36 @@ export async function GET(request: NextRequest) {
       };
     });
 
+    // Define video type for type safety
+    type VideoAnalytics = {
+      id: string;
+      title: string;
+      platform: string;
+      publishedAt: string;
+      thumbnailUrl?: string;
+      url: string;
+      views: number;
+      likes: number;
+      comments: number;
+      shares: number;
+      saves: number;
+      engagementRate: number;
+      viewsTrend: number;
+    };
+
     // Calculate aggregate stats
     const stats = {
       totalVideos: videos.length,
-      totalViews: videos.reduce((sum: number, v: any) => sum + v.views, 0),
-      totalLikes: videos.reduce((sum: number, v: any) => sum + v.likes, 0),
-      totalComments: videos.reduce((sum: number, v: any) => sum + v.comments, 0),
-      totalShares: videos.reduce((sum: number, v: any) => sum + v.shares, 0),
+      totalViews: videos.reduce((sum: number, v: VideoAnalytics) => sum + v.views, 0),
+      totalLikes: videos.reduce((sum: number, v: VideoAnalytics) => sum + v.likes, 0),
+      totalComments: videos.reduce((sum: number, v: VideoAnalytics) => sum + v.comments, 0),
+      totalShares: videos.reduce((sum: number, v: VideoAnalytics) => sum + v.shares, 0),
       avgEngagement: videos.length > 0
-        ? videos.reduce((sum: number, v: any) => sum + v.engagementRate, 0) / videos.length
+        ? videos.reduce((sum: number, v: VideoAnalytics) => sum + v.engagementRate, 0) / videos.length
         : 0,
       platformBreakdown: {
-        instagram: videos.filter((v: any) => v.platform === 'instagram').length,
-        tiktok: videos.filter((v: any) => v.platform === 'tiktok').length,
+        instagram: videos.filter((v: VideoAnalytics) => v.platform === 'instagram').length,
+        tiktok: videos.filter((v: VideoAnalytics) => v.platform === 'tiktok').length,
       }
     };
 

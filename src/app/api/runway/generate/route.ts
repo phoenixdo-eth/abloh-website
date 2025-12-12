@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     const client = new RunwayML({ apiKey: runwayApiKey });
 
     let task;
-    let generationType = type || 'text_to_image';
+    const generationType = type || 'text_to_image';
 
     console.log(`Starting Runway ${generationType}:`, promptText);
 

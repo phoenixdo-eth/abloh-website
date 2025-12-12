@@ -144,11 +144,14 @@ export default function DataTableWrapper<T extends Record<string, unknown>>({
       result = result.filter(filterRow);
     }
 
-    // Reset to page 1 when filters change
-    setCurrentPage(1);
-
     return result;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, searchTerm, activeFilters]);
+
+  // Reset to page 1 when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, activeFilters]);
 
   // Pagination
   const totalPages = Math.ceil(filteredData.length / pageSize);
