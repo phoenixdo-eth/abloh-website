@@ -7,6 +7,7 @@ import {
   CalendarIcon,
   FileTextIcon,
   FilmIcon,
+  FolderIcon,
   HelpCircleIcon,
   ImageIcon,
   InstagramIcon,
@@ -44,11 +45,6 @@ const data = {
       title: "Dashboard",
       url: "/dashboard",
       icon: LayoutDashboardIcon,
-    },
-    {
-      title: "Team",
-      url: "/dashboard/team",
-      icon: UsersIcon,
     },
   ],
   navClouds: [
@@ -152,6 +148,18 @@ const data = {
       icon: BarChartIcon,
     },
   ],
+  team: [
+    {
+      name: "Team",
+      url: "/dashboard/team",
+      icon: UsersIcon,
+    },
+    {
+      name: "Library",
+      url: "/dashboard/library",
+      icon: FolderIcon,
+    },
+  ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -178,6 +186,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
+        <NavDocuments items={data.team} label="Team" />
         <NavDocuments items={data.inspiration} label="Research" />
         <NavDocuments items={data.creation} label="Create" />
         <NavDocuments items={data.tracking} label="Track" />

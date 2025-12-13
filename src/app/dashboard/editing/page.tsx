@@ -22,6 +22,7 @@ import { VideoComposition } from "./VideoComposition"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { EditorChatbot } from "@/components/editor-chatbot"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -1327,6 +1328,17 @@ export default function EditingPage() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* AI Chatbot Assistant */}
+        <div className="px-4 lg:px-6 pb-4">
+          <EditorChatbot
+            onAction={(action, params) => {
+              console.log("Chatbot action:", action, params)
+              // Handle chatbot actions here
+              // e.g., add caption, trim clip, export, etc.
+            }}
+          />
         </div>
         </div>
       </SidebarInset>
