@@ -21,11 +21,27 @@ interface Message {
   timestamp: Date
 }
 
-interface EditorChatbotProps {
-  onAction?: (action: string, params?: any) => void
+interface TranscriptionResult {
+  transcription: string
+  segments: any[]
+  words: any[]
+  pauses: Pause[]
+  duration: number
 }
 
-export function EditorChatbot({ onAction }: EditorChatbotProps) {
+interface Pause {
+  start: number
+  end: number
+  duration: number
+  type: "short" | "awkward" | "long"
+}
+
+interface EditorChatbotProps {
+  onAction?: (action: string, params?: any) => void
+  transcriptionResult?: TranscriptionResult | null
+}
+
+export function EditorChatbot({ onAction, transcriptionResult }: EditorChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -64,18 +80,63 @@ export function EditorChatbot({ onAction }: EditorChatbotProps) {
 
     // Simulate AI response
     setTimeout(() => {
-      const responses = [
-        "I'll help you with that! Let me process your request.",
-        "Great idea! I can add that to your timeline.",
-        "I've noted that. Would you like me to apply this change?",
-        "That's a good suggestion. I'll adjust the settings accordingly.",
-        "Perfect! I'll update the video with those parameters.",
-      ]
+      let responseContent = ""
+
+      // Check if user is asking about pauses and we have transcription data
+      const lowerInput = input.toLowerCase()
+      const isPauseQuery =
+        lowerInput.includes("pause") ||
+        lowerInput.includes("awkward") ||
+        lowerInput.includes("silence") ||
+        lowerInput.includes("gap")
+
+      if (isPauseQuery && transcriptionResult) {
+        const awkwardPauses = transcriptionResult.pauses.filter(
+          (p) => p.type === "awkward" || p.type === "long"
+        )
+
+        if (awkwardPauses.length > 0) {
+          const formatTime = (seconds: number) => {
+            const mins = Math.floor(seconds / 60)
+            const secs = Math.floor(seconds % 60)
+            return `${mins}:${secs.toString().padStart(2, "0")}`
+          }
+
+          responseContent = `I found ${awkwardPauses.length} awkward or long pause${
+            awkwardPauses.length > 1 ? "s" : ""
+          } in your audio:\n\n`
+
+          awkwardPauses.slice(0, 3).forEach((pause, idx) => {
+            responseContent += `${idx + 1}. ${pause.type.charAt(0).toUpperCase() + pause.type.slice(1)} pause (${pause.duration.toFixed(1)}s) at ${formatTime(pause.start)}\n`
+          })
+
+          if (awkwardPauses.length > 3) {
+            responseContent += `\n...and ${awkwardPauses.length - 3} more. `
+          }
+
+          responseContent +=
+            "\n\nI recommend cutting or trimming these sections for a smoother flow. Click on any pause in the panel to jump to that timestamp."
+        } else {
+          responseContent =
+            "Great news! I didn't find any awkward pauses in your audio. The pacing looks good!"
+        }
+      } else if (transcriptionResult && lowerInput.includes("transcript")) {
+        responseContent = `Here's your transcript:\n\n"${transcriptionResult.transcription}"\n\nDuration: ${Math.floor(transcriptionResult.duration / 60)}:${Math.floor(transcriptionResult.duration % 60).toString().padStart(2, "0")}`
+      } else {
+        const responses = [
+          "I'll help you with that! Let me process your request.",
+          "Great idea! I can add that to your timeline.",
+          "I've noted that. Would you like me to apply this change?",
+          "That's a good suggestion. I'll adjust the settings accordingly.",
+          "Perfect! I'll update the video with those parameters.",
+        ]
+        responseContent = responses[Math.floor(Math.random() * responses.length)]
+      }
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: responses[Math.floor(Math.random() * responses.length)],
+        content: responseContent,
         timestamp: new Date(),
       }
 
@@ -96,12 +157,19 @@ export function EditorChatbot({ onAction }: EditorChatbotProps) {
     }
   }
 
-  const quickActions = [
-    { label: "Add caption", action: "add-caption" },
-    { label: "Trim clip", action: "trim-clip" },
-    { label: "Add transition", action: "add-transition" },
-    { label: "Export video", action: "export" },
-  ]
+  const quickActions = transcriptionResult
+    ? [
+        { label: "Show awkward pauses", action: "show-pauses" },
+        { label: "View transcript", action: "view-transcript" },
+        { label: "Edit around pauses", action: "edit-pauses" },
+        { label: "Add captions", action: "add-captions" },
+      ]
+    : [
+        { label: "Add caption", action: "add-caption" },
+        { label: "Trim clip", action: "trim-clip" },
+        { label: "Add transition", action: "add-transition" },
+        { label: "Export video", action: "export" },
+      ]
 
   return (
     <Card className="flex flex-col border-t shadow-lg">

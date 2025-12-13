@@ -23,6 +23,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { EditorChatbot } from "@/components/editor-chatbot"
+import { TranscriptionPanel } from "@/components/transcription-panel"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -106,6 +107,7 @@ export default function EditingPage() {
   const [isExporting, setIsExporting] = useState(false)
   const [exportProgress, setExportProgress] = useState(0)
   const [exportStage, setExportStage] = useState("")
+  const [transcriptionResult, setTranscriptionResult] = useState<any>(null)
   const playerRef = useRef<any>(null)
   const timelineRef = useRef<HTMLDivElement>(null)
 
@@ -478,6 +480,19 @@ export default function EditingPage() {
         setExportProgress(0)
         setExportStage("")
       }, 2000)
+    }
+  }
+
+  // Handle transcription complete
+  const handleTranscriptionComplete = (result: any) => {
+    setTranscriptionResult(result)
+  }
+
+  // Handle pause click - seek to that position
+  const handlePauseClick = (pause: any) => {
+    setCurrentTime(pause.start)
+    if (playerRef.current) {
+      playerRef.current.seekTo(Math.floor(pause.start * 30))
     }
   }
 
@@ -996,8 +1011,15 @@ export default function EditingPage() {
 
                 {/* Right Sidebar - Properties or AI Assistant */}
                 <div className="w-80 flex flex-col gap-4">
+                  {/* Transcription Panel */}
+                  <TranscriptionPanel
+                    onTranscriptionComplete={handleTranscriptionComplete}
+                    onPauseClick={handlePauseClick}
+                  />
+
                   {/* AI Chatbot Assistant */}
                   <EditorChatbot
+                    transcriptionResult={transcriptionResult}
                     onAction={(action, params) => {
                       console.log("Chatbot action:", action, params)
                       // Handle chatbot actions here
