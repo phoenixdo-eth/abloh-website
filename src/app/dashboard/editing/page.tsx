@@ -994,15 +994,26 @@ export default function EditingPage() {
                   </div>
                 </div>
 
-                {/* Right Sidebar - Properties */}
-                {selectedClip && (() => {
-                  const videoClip = videoClips.find((c) => c.id === selectedClip)
-                  const audioClip = audioClips.find((c) => c.id === selectedClip)
-                  const caption = captions.find((c) => c.id === selectedClip)
-                  const clip = videoClip || audioClip
+                {/* Right Sidebar - Properties or AI Assistant */}
+                <div className="w-80 flex flex-col gap-4">
+                  {/* AI Chatbot Assistant */}
+                  <EditorChatbot
+                    onAction={(action, params) => {
+                      console.log("Chatbot action:", action, params)
+                      // Handle chatbot actions here
+                      // e.g., add caption, trim clip, export, etc.
+                    }}
+                  />
 
-                  return (
-                    <div className="w-80 border rounded-lg bg-muted/30 overflow-y-auto p-4">
+                  {/* Properties Panel */}
+                  {selectedClip && (() => {
+                    const videoClip = videoClips.find((c) => c.id === selectedClip)
+                    const audioClip = audioClips.find((c) => c.id === selectedClip)
+                    const caption = captions.find((c) => c.id === selectedClip)
+                    const clip = videoClip || audioClip
+
+                    return (
+                      <div className="border rounded-lg bg-muted/30 overflow-y-auto p-4">
                       <h3 className="font-semibold mb-4">Properties</h3>
                       <div className="space-y-4">
                         {clip && (
@@ -1325,20 +1336,10 @@ export default function EditingPage() {
                     </div>
                   )
                 })()}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* AI Chatbot Assistant */}
-        <div className="px-4 lg:px-6 pb-4">
-          <EditorChatbot
-            onAction={(action, params) => {
-              console.log("Chatbot action:", action, params)
-              // Handle chatbot actions here
-              // e.g., add caption, trim clip, export, etc.
-            }}
-          />
         </div>
         </div>
       </SidebarInset>

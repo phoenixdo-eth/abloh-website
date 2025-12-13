@@ -35,7 +35,7 @@ export function EditorChatbot({ onAction }: EditorChatbotProps) {
     },
   ])
   const [input, setInput] = useState("")
-  const [isExpanded, setIsExpanded] = useState(true)
+  const [isExpanded, setIsExpanded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
