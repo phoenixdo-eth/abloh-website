@@ -6,6 +6,7 @@ import {
   BookmarkIcon,
   CalendarIcon,
   FileTextIcon,
+  FilmIcon,
   HelpCircleIcon,
   ImageIcon,
   InstagramIcon,
@@ -110,6 +111,11 @@ const data = {
       name: "Generations",
       url: "/dashboard/generations",
       icon: ImageIcon,
+    },
+    {
+      name: "Editing",
+      url: "/dashboard/editing",
+      icon: FilmIcon,
     },
     {
       name: "Social Media",

@@ -110,7 +110,7 @@ html {
 body {
   background: #ffffff;
   color: var(--foreground);
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-sans), sans-serif;
   overflow-x: hidden;
   min-height: 100vh;
   position: relative;
